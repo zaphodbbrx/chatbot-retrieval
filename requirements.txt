@@ -36,6 +36,7 @@ scipy
 simplegeneric
 six
 terminado
+termcolor
 tornado
 traitlets
 widgetsnbextension

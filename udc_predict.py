@@ -6,6 +6,7 @@ import udc_model
 import udc_hparams
 from models.dual_encoder import dual_encoder_model
 import pandas as pd
+from termcolor import colored
 
 tf.flags.DEFINE_string("model_dir", None, "Directory to load model checkpoints from")
 tf.flags.DEFINE_string("vocab_processor_file", "./data/vocab_processor.bin", "Saved vocabulary processor file")
@@ -70,10 +71,13 @@ if __name__ == "__main__":
 
   endtime = time.time()
 
-  print("[Predict time] %.2f sec" % round(endtime - starttime,2))
-  print("[     Context] {}".format(INPUT_CONTEXT))
+  print('\n')
+  print(colored('[Predict time]', on_color='on_blue',color="white"),"%.2f sec" % round(endtime - starttime,2))
+  print(colored('[     Context]', on_color='on_blue',color="white"),INPUT_CONTEXT)
   # print("[Results value ]",results)
   answerId = results.argmax(axis=0)
-  print("[      Answer]", POTENTIAL_RESPONSES[answerId])
-  if not answerId==0:
-      print("[Right answer]", POTENTIAL_RESPONSES[0])
+  if answerId==0:
+      print(colored('[      Answer]', on_color='on_green'), POTENTIAL_RESPONSES[answerId])
+  else:
+      print (colored('[      Answer]', on_color='on_red'),POTENTIAL_RESPONSES[answerId])
+      print (colored('[Right answer]', on_color='on_green'), POTENTIAL_RESPONSES[0])
