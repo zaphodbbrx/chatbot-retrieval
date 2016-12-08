@@ -61,7 +61,7 @@ python3 udc_predict.py --model_dir=./runs/1481183770/
 
 #### Issues
 
-* if you have problem's with loading **CUDA library libcuda.so.1** use *.sh script, or export *variables* in bash:
+* if you have problem's with loading **CUDA library libcuda.so.1** use *.sh script, or export _variables_ in bash:
 
 ```
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64"
@@ -74,6 +74,7 @@ export CUDA_HOME=/usr/local/cuda
 export CUDA_VISIBLE_DEVICES=0
 ```
 
-* if you have error, you maybe use trained model from other machine, and you must retrain model on own machine
+* if you have error (see below), you maybe use trained model from other machine, and you must retrain model on own machine
+
 >tensorflow.python.framework.errors.NotFoundError: /home/user/git/chatbot/chatbot-retrieval/runs/1481104318
 
