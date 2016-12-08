@@ -1,15 +1,11 @@
-import os
 import time
-import itertools
 import sys
 import numpy as np
 import tensorflow as tf
 import udc_model
 import udc_hparams
-import udc_metrics
-import udc_inputs
 from models.dual_encoder import dual_encoder_model
-from models.helpers import load_vocab
+import pandas as pd
 
 tf.flags.DEFINE_string("model_dir", None, "Directory to load model checkpoints from")
 tf.flags.DEFINE_string("vocab_processor_file", "./data/vocab_processor.bin", "Saved vocabulary processor file")
@@ -26,9 +22,11 @@ def tokenizer_fn(iterator):
 vp = tf.contrib.learn.preprocessing.VocabularyProcessor.restore(
   FLAGS.vocab_processor_file)
 
-# Load your own data here
-INPUT_CONTEXT = "Example context"
-POTENTIAL_RESPONSES = ["Response 1", "Response 2"]
+# Load data for predict
+test_df = pd.read_csv("./data/test.csv")
+elementId = 0
+INPUT_CONTEXT = test_df.Context[elementId]
+POTENTIAL_RESPONSES = test_df.iloc[elementId,1:].values
 
 def get_features(context, utterance):
   context_matrix = np.array(list(vp.transform([context])))
@@ -44,15 +42,34 @@ def get_features(context, utterance):
   return features, None
 
 if __name__ == "__main__":
+  # tf.logging.set_verbosity(tf.logging.INFO)
   hparams = udc_hparams.create_hparams()
   model_fn = udc_model.create_model_fn(hparams, model_impl=dual_encoder_model)
+
   estimator = tf.contrib.learn.Estimator(model_fn=model_fn, model_dir=FLAGS.model_dir)
 
   # Ugly hack, seems to be a bug in Tensorflow
   # estimator.predict doesn't work without this line
   estimator._targets_info = tf.contrib.learn.estimators.tensor_signature.TensorSignature(tf.constant(0, shape=[1,1]))
 
-  print("Context: {}".format(INPUT_CONTEXT))
+  results = []
+
+  starttime = time.time()
+
   for r in POTENTIAL_RESPONSES:
-    prob = estimator.predict(input_fn=lambda: get_features(INPUT_CONTEXT, r))
-    print("{}: {:g}".format(r, prob[0,0]))
+    prob = estimator.predict(input_fn=lambda: get_features(INPUT_CONTEXT, r),as_iterable=True)
+    results.append(next(prob)[0])
+    # print("[ ] {}: {:g}".format(r, next(prob)[0]))
+    # print("{}: {:g}".format(r, prob[0,0]))
+
+  endtime = time.time()
+
+  results = np.array(results)
+  answerId = results.argmax(axis=0)
+
+  print("[Time]", endtime - starttime,"sec")
+  print("[Context       ] {}".format(INPUT_CONTEXT))
+  print("[Results value ]",results)
+  print("[answer        ]", POTENTIAL_RESPONSES[answerId])
+  if not answerId==0:
+      print("[right responce]", POTENTIAL_RESPONSES[0])
