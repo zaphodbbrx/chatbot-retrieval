@@ -11,8 +11,8 @@ The code here implements the Dual LSTM Encoder model from [The Ubuntu Dialogue C
 This code uses Python 3. Clone the repository and install all required packages:
 
 ```
-1. install tensorflow 0.11 (0.10 and 0.12 has problems with this code)
-2. (optional) install cuda 8 (for gpu support)
+1. install tensorflow (version 0.11 and above wokr correctly, version 0.10 not tested)
+2. (optional) install cuda + cudnn (for gpu support)
 2. pip3 install -U pip
 3. pip3 install -r requirements.txt
 ```
