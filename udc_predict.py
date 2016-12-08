@@ -60,13 +60,12 @@ if __name__ == "__main__":
 
   estimator = tf.contrib.learn.Estimator(model_fn=model_fn, model_dir=FLAGS.model_dir)
 
-  # Ugly hack, seems to be a bug in Tensorflow
-  # estimator.predict doesn't work without this line
-  estimator._targets_info = tf.contrib.learn.estimators.tensor_signature.TensorSignature(tf.constant(0, shape=[1,1]))
-
   starttime = time.time()
 
-  prob = estimator.predict(input_fn=lambda: get_features(INPUT_CONTEXT, POTENTIAL_RESPONSES),as_iterable=True)
+  if float(tf.__version__[0:4])<0.12: #check TF version to select method
+      prob = estimator.predict(input_fn=lambda: get_features(INPUT_CONTEXT, POTENTIAL_RESPONSES),as_iterable=True)
+  else:
+      prob = estimator.predict(input_fn=lambda: get_features(INPUT_CONTEXT, POTENTIAL_RESPONSES))
   results = next(prob)
 
   endtime = time.time()
