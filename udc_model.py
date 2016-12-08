@@ -41,14 +41,34 @@ def create_model_fn(hparams, model_impl):
       return probs, loss, train_op
 
     if mode == tf.contrib.learn.ModeKeys.INFER:
+
+      all_contexts = [context]
+      all_context_lens = [context_len]
+      all_utterances = [utterance]
+      all_utterance_lens = [utterance_len]
+
+      for i in range(1,features["len"]):
+        distractor, distractor_len = get_id_feature(features,
+            "utterance_{}".format(i),
+            "utterance_{}_len".format(i),
+            hparams.max_utterance_len)
+        all_contexts.append(context)
+        all_context_lens.append(context_len)
+        all_utterances.append(distractor)
+        all_utterance_lens.append(distractor_len)
+
       probs, loss = model_impl(
           hparams,
           mode,
-          context,
-          context_len,
-          utterance,
-          utterance_len,
+          tf.concat(0, all_contexts),
+          tf.concat(0, all_context_lens),
+          tf.concat(0, all_utterances),
+          tf.concat(0, all_utterance_lens),
           None)
+
+      split_probs = tf.split(0, features["len"], probs)
+      probs = tf.concat(1, split_probs)
+
       return probs, 0.0, None
 
     if mode == tf.contrib.learn.ModeKeys.EVAL:

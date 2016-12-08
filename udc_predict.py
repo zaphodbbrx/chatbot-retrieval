@@ -28,17 +28,28 @@ elementId = 0
 INPUT_CONTEXT = test_df.Context[elementId]
 POTENTIAL_RESPONSES = test_df.iloc[elementId,1:].values
 
-def get_features(context, utterance):
+def get_features(context, utterances):
   context_matrix = np.array(list(vp.transform([context])))
-  utterance_matrix = np.array(list(vp.transform([utterance])))
+  utterance_matrix = np.array(list(vp.transform([utterances[0]])))
   context_len = len(context.split(" "))
-  utterance_len = len(utterance.split(" "))
-  features = {
-    "context": tf.convert_to_tensor(context_matrix, dtype=tf.int64),
-    "context_len": tf.constant(context_len, shape=[1,1], dtype=tf.int64),
-    "utterance": tf.convert_to_tensor(utterance_matrix, dtype=tf.int64),
-    "utterance_len": tf.constant(utterance_len, shape=[1,1], dtype=tf.int64),
+  utterance_len = len(utterances[0].split(" "))
+  features =  {
+        "context": tf.convert_to_tensor(context_matrix, dtype=tf.int64),
+        "context_len": tf.constant(context_len, shape=[1,1], dtype=tf.int64),
+        "utterance": tf.convert_to_tensor(utterance_matrix, dtype=tf.int64),
+        "utterance_len": tf.constant(utterance_len, shape=[1,1], dtype=tf.int64),
+        "len":len(utterances)
   }
+
+  for i in range(1,len(utterances)):
+      utterance = utterances[i];
+
+      utterance_matrix = np.array(list(vp.transform([utterance])))
+      utterance_len = len(utterance.split(" "))
+
+      features["utterance_{}".format(i)] = tf.convert_to_tensor(utterance_matrix, dtype=tf.int64)
+      features["utterance_{}_len".format(i)] = tf.constant(utterance_len, shape=[1,1], dtype=tf.int64)
+
   return features, None
 
 if __name__ == "__main__":
@@ -52,24 +63,17 @@ if __name__ == "__main__":
   # estimator.predict doesn't work without this line
   estimator._targets_info = tf.contrib.learn.estimators.tensor_signature.TensorSignature(tf.constant(0, shape=[1,1]))
 
-  results = []
-
   starttime = time.time()
 
-  for r in POTENTIAL_RESPONSES:
-    prob = estimator.predict(input_fn=lambda: get_features(INPUT_CONTEXT, r),as_iterable=True)
-    results.append(next(prob)[0])
-    # print("[ ] {}: {:g}".format(r, next(prob)[0]))
-    # print("{}: {:g}".format(r, prob[0,0]))
+  prob = estimator.predict(input_fn=lambda: get_features(INPUT_CONTEXT, POTENTIAL_RESPONSES),as_iterable=True)
+  results = next(prob)
 
   endtime = time.time()
 
-  results = np.array(results)
+  print("[Predict time] %.2f sec" % round(endtime - starttime,2))
+  print("[     Context] {}".format(INPUT_CONTEXT))
+  # print("[Results value ]",results)
   answerId = results.argmax(axis=0)
-
-  print("[Time]", endtime - starttime,"sec")
-  print("[Context       ] {}".format(INPUT_CONTEXT))
-  print("[Results value ]",results)
-  print("[answer        ]", POTENTIAL_RESPONSES[answerId])
+  print("[      Answer]", POTENTIAL_RESPONSES[answerId])
   if not answerId==0:
-      print("[right responce]", POTENTIAL_RESPONSES[0])
+      print("[Right answer]", POTENTIAL_RESPONSES[0])
