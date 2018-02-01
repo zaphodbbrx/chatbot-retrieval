@@ -90,8 +90,8 @@ def create_example_train(row, vocab):
   example.features.feature["utterance"].int64_list.value.extend(utterance_transformed)
   example.features.feature["context_len"].int64_list.value.extend([context_len])
   example.features.feature["utterance_len"].int64_list.value.extend([utterance_len])
-  example.features.feature["context_token_len_avg"].float64_list.value.extend([context_token_len_avg])
-  example.features.feature["utterance_token_len_avg"].float64_list.value.extend([utterance_token_len_avg])
+  example.features.feature["context_token_len_avg"].float_list.value.extend([context_token_len_avg])
+  example.features.feature["utterance_token_len_avg"].float_list.value.extend([utterance_token_len_avg])
   example.features.feature["label"].int64_list.value.extend([label])
   return example
 
