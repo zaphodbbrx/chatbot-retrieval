@@ -80,8 +80,8 @@ def create_example_train(row, vocab):
   utterance_transformed = transform_sentence(utterance, vocab)
   context_len = len(next(vocab._tokenizer([context])))
   utterance_len = len(next(vocab._tokenizer([utterance])))
-  context_token_len_avg = [len(t) for t in next(vocab._tokenizer([context]))]
-  utterance_token_len_avg = [len(t) for t in next(vocab._tokenizer([utterance]))]
+  context_token_len_avg = np.mean([len(t) for t in next(vocab._tokenizer([context]))])
+  utterance_token_len_avg = np.mean([len(t) for t in next(vocab._tokenizer([utterance]))])
   label = int(float(label))
 
   # New Example
