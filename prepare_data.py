@@ -80,6 +80,8 @@ def create_example_train(row, vocab):
   utterance_transformed = transform_sentence(utterance, vocab)
   context_len = len(next(vocab._tokenizer([context])))
   utterance_len = len(next(vocab._tokenizer([utterance])))
+  context_token_len_avg = [len(t) for t in next(vocab._tokenizer([context]))]
+  utterance_token_len_avg = [len(t) for t in next(vocab._tokenizer([utterance]))]
   label = int(float(label))
 
   # New Example
@@ -88,6 +90,8 @@ def create_example_train(row, vocab):
   example.features.feature["utterance"].int64_list.value.extend(utterance_transformed)
   example.features.feature["context_len"].int64_list.value.extend([context_len])
   example.features.feature["utterance_len"].int64_list.value.extend([utterance_len])
+  example.features.feature["context_token_len_avg"].float64_list.value.extend([context_token_len_avg])
+  example.features.feature["utterance_token_len_avg"].float64_list.value.extend([utterance_token_len_avg])
   example.features.feature["label"].int64_list.value.extend([label])
   return example
 
