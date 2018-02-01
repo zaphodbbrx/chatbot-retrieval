@@ -5,6 +5,7 @@ import functools
 import tensorflow as tf
 import numpy as np
 import array
+import re
 
 tf.flags.DEFINE_integer(
   "min_word_frequency", 5, "Minimum frequency of words in the vocabulary")
@@ -82,6 +83,8 @@ def create_example_train(row, vocab):
   utterance_len = len(next(vocab._tokenizer([utterance])))
   context_token_len_avg = np.mean([len(t) for t in next(vocab._tokenizer([context]))])
   utterance_token_len_avg = np.mean([len(t) for t in next(vocab._tokenizer([utterance]))])
+  context_nums = len(re.findall(r'[0-9]',context))
+  utterance_nums = len(re.findall(r'[0-9]',utterance))
   label = int(float(label))
 
   # New Example
@@ -92,6 +95,8 @@ def create_example_train(row, vocab):
   example.features.feature["utterance_len"].int64_list.value.extend([utterance_len])
   example.features.feature["context_token_len_avg"].float_list.value.extend([context_token_len_avg])
   example.features.feature["utterance_token_len_avg"].float_list.value.extend([utterance_token_len_avg])
+  example.features.feature["context_nums"].int64_list.value.extend([context_nums])
+  example.features.feature["utterance_nums"].int64_list.value.extend([utterance_nums])
   example.features.feature["label"].int64_list.value.extend([label])
   return example
 
