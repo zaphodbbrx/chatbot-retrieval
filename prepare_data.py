@@ -163,7 +163,7 @@ def create_lda_model():
     vect = CountVectorizer(min_df=20, max_df=0.2, stop_words='english', 
                        token_pattern='(?u)\\b\\w\\w\\w+\\b')    
     udc = pd.read_csv(TRAIN_PATH)
-    X = vect.fit_transform(udc)
+    X = vect.fit_transform(udc['Context'])
     corpus = gensim.matutils.Sparse2Corpus(X, documents_columns=False)
     id_map = dict((v, k) for k, v in vect.vocabulary_.items())
     ldamodel = gensim.models.ldamodel.LdaModel(corpus, id2word = id_map, num_topics = 10, passes = 25, random_state = 34)
