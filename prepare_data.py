@@ -83,10 +83,10 @@ def create_example_train(row, vocab):
   utterance_transformed = transform_sentence(utterance, vocab)
   context_len = len(next(vocab._tokenizer([context])))
   utterance_len = len(next(vocab._tokenizer([utterance])))
-  context_token_len_avg = np.mean([len(t) for t in next(vocab._tokenizer([context]))])
-  utterance_token_len_avg = np.mean([len(t) for t in next(vocab._tokenizer([utterance]))])
-  context_nums = len(re.findall(r'[0-9]',context))
-  utterance_nums = len(re.findall(r'[0-9]',utterance))
+  #context_token_len_avg = np.mean([len(t) for t in next(vocab._tokenizer([context]))])
+  #utterance_token_len_avg = np.mean([len(t) for t in next(vocab._tokenizer([utterance]))])
+  #context_nums = len(re.findall(r'[0-9]',context))
+  #utterance_nums = len(re.findall(r'[0-9]',utterance))
 
   label = int(float(label))
 
@@ -96,10 +96,10 @@ def create_example_train(row, vocab):
   example.features.feature["utterance"].int64_list.value.extend(utterance_transformed)
   example.features.feature["context_len"].int64_list.value.extend([context_len])
   example.features.feature["utterance_len"].int64_list.value.extend([utterance_len])
-  example.features.feature["context_token_len_avg"].float_list.value.extend([context_token_len_avg])
-  example.features.feature["utterance_token_len_avg"].float_list.value.extend([utterance_token_len_avg])
-  example.features.feature["context_nums"].int64_list.value.extend([context_nums])
-  example.features.feature["utterance_nums"].int64_list.value.extend([utterance_nums])
+  #example.features.feature["context_token_len_avg"].float_list.value.extend([context_token_len_avg])
+  #example.features.feature["utterance_token_len_avg"].float_list.value.extend([utterance_token_len_avg])
+  #example.features.feature["context_nums"].int64_list.value.extend([context_nums])
+  #example.features.feature["utterance_nums"].int64_list.value.extend([utterance_nums])
 
   example.features.feature["label"].int64_list.value.extend([label])
   return example
@@ -116,10 +116,10 @@ def create_example_test(row, vocab):
   utterance_len = len(next(vocab._tokenizer([utterance])))
   context_transformed = transform_sentence(context, vocab)
   utterance_transformed = transform_sentence(utterance, vocab)
-  context_token_len_avg = np.mean([len(t) for t in next(vocab._tokenizer([context]))])
-  utterance_token_len_avg = np.mean([len(t) for t in next(vocab._tokenizer([utterance]))])
-  context_nums = len(re.findall(r'[0-9]',context))
-  utterance_nums = len(re.findall(r'[0-9]',utterance))
+  #context_token_len_avg = np.mean([len(t) for t in next(vocab._tokenizer([context]))])
+  #utterance_token_len_avg = np.mean([len(t) for t in next(vocab._tokenizer([utterance]))])
+  #context_nums = len(re.findall(r'[0-9]',context))
+  #utterance_nums = len(re.findall(r'[0-9]',utterance))
 
   
   # New Example
@@ -128,10 +128,10 @@ def create_example_test(row, vocab):
   example.features.feature["utterance"].int64_list.value.extend(utterance_transformed)
   example.features.feature["context_len"].int64_list.value.extend([context_len])
   example.features.feature["utterance_len"].int64_list.value.extend([utterance_len])
-  example.features.feature["context_token_len_avg"].float_list.value.extend([context_token_len_avg])
-  example.features.feature["utterance_token_len_avg"].float_list.value.extend([utterance_token_len_avg])
-  example.features.feature["context_nums"].int64_list.value.extend([context_nums])
-  example.features.feature["utterance_nums"].int64_list.value.extend([utterance_nums])
+  #example.features.feature["context_token_len_avg"].float_list.value.extend([context_token_len_avg])
+  #example.features.feature["utterance_token_len_avg"].float_list.value.extend([utterance_token_len_avg])
+  #example.features.feature["context_nums"].int64_list.value.extend([context_nums])
+  #example.features.feature["utterance_nums"].int64_list.value.extend([utterance_nums])
 
   
   # Distractor sequences
