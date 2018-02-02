@@ -156,7 +156,7 @@ def create_example_test(row, vocab, lda):
 def eval_lda_model(ldamodel,new_doc):
     vect = CountVectorizer(min_df=20, max_df=0.2, stop_words='english', 
                        token_pattern='(?u)\\b\\w\\w\\w+\\b')    
-    bow = vect.transform(new_doc)
+    bow = vect.transform([new_doc])
     s2c = gensim.matutils.Sparse2Corpus(bow, documents_columns=False)
     new_topics = [nt for nt in ldamodel[s2c]]
     return [nt for _,nt in new_topics[0]]
