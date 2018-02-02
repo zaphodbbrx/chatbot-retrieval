@@ -216,16 +216,16 @@ if __name__ == "__main__":
   create_tfrecords_file(
       input_filename=VALIDATION_PATH,
       output_filename=os.path.join(FLAGS.output_dir, "validation.tfrecords"),
-      example_fn=functools.partial(create_example_test, vocab=vocab, lda=ldamodel))
+      example_fn=functools.partial(create_example_test, vocab=vocab, lda=ldamodel, vect = vect))
 
   # Create test.tfrecords
   create_tfrecords_file(
       input_filename=TEST_PATH,
       output_filename=os.path.join(FLAGS.output_dir, "test.tfrecords"),
-      example_fn=functools.partial(create_example_test, vocab=vocab, lda=ldamodel))
+      example_fn=functools.partial(create_example_test, vocab=vocab, lda=ldamodel,vect = vect))
 
   # Create train.tfrecords
   create_tfrecords_file(
       input_filename=TRAIN_PATH,
       output_filename=os.path.join(FLAGS.output_dir, "train.tfrecords"),
-      example_fn=functools.partial(create_example_train, vocab=vocab,lda=ldamodel))
+      example_fn=functools.partial(create_example_train, vocab=vocab,lda=ldamodel, vect = vect))
