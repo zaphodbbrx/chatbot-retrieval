@@ -104,8 +104,8 @@ def create_example_train(row, vocab, lda, vect):
   example.features.feature["utterance_token_len_avg"].float_list.value.extend([utterance_token_len_avg])
   example.features.feature["context_nums"].int64_list.value.extend([context_nums])
   example.features.feature["utterance_nums"].int64_list.value.extend([utterance_nums])
-  example.features.feature["context_topics"].float_list.value.extend([context_topics])
-  example.features.feature["utterance_topics"].float_list.value.extend([utterance_topics])
+  example.features.feature["context_topics"].float_list.value.extend(context_topics)
+  example.features.feature["utterance_topics"].float_list.value.extend(utterance_topics)
   example.features.feature["label"].int64_list.value.extend([label])
   return example
 
@@ -138,8 +138,8 @@ def create_example_test(row, vocab, lda, vect):
   example.features.feature["utterance_token_len_avg"].float_list.value.extend([utterance_token_len_avg])
   example.features.feature["context_nums"].int64_list.value.extend([context_nums])
   example.features.feature["utterance_nums"].int64_list.value.extend([utterance_nums])
-  example.features.feature["context_topics"].float_list.value.extend([context_topics])
-  example.features.feature["utterance_topics"].float_list.value.extend([utterance_topics])
+  example.features.feature["context_topics"].float_list.value.extend(context_topics)
+  example.features.feature["utterance_topics"].float_list.value.extend(utterance_topics)
   
   # Distractor sequences
   for i, distractor in enumerate(distractors):
