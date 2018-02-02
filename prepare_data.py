@@ -163,10 +163,10 @@ def create_lda_model():
     vect = CountVectorizer(min_df=20, max_df=0.2, stop_words='english', 
                        token_pattern='(?u)\\b\\w\\w\\w+\\b')    
     udc = pd.read_csv(TRAIN_PATH)
-    X = vect.fit_transform(udc['Context'])
+    X = vect.fit_transform(udc.loc[:40000, 'Context'])
     corpus = gensim.matutils.Sparse2Corpus(X, documents_columns=False)
     id_map = dict((v, k) for k, v in vect.vocabulary_.items())
-    ldamodel = gensim.models.ldamodel.LdaModel(corpus, id2word = id_map, num_topics = 10, passes = 25, random_state = 34)
+    ldamodel = gensim.models.ldamodel.LdaModel(corpus, id2word = id_map, num_topics = 10, passes = 5, random_state = 34)
     return ldamodel
 
 def create_tfrecords_file(input_filename, output_filename, example_fn):
