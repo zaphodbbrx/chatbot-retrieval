@@ -76,7 +76,7 @@ def create_text_sequence_feature(fl, sentence, sentence_len, vocab):
   return fl
 
 
-def create_example_train(row, vocab, lda):
+def create_example_train(row, vocab, lda, vect):
   """
   Creates a training example for the Ubuntu Dialog Corpus dataset.
   Returnsthe a tensorflow.Example Protocol Buffer object.
@@ -90,8 +90,8 @@ def create_example_train(row, vocab, lda):
   utterance_token_len_avg = np.mean([len(t) for t in next(vocab._tokenizer([utterance]))])
   context_nums = len(re.findall(r'[0-9]',context))
   utterance_nums = len(re.findall(r'[0-9]',utterance))
-  context_topics = eval_lda_model(lda,context)
-  utterance_topics = eval_lda_model(lda,utterance)
+  context_topics = eval_lda_model(lda,vect,context)
+  utterance_topics = eval_lda_model(lda,vect,utterance)
   label = int(float(label))
 
   # New Example
@@ -110,7 +110,7 @@ def create_example_train(row, vocab, lda):
   return example
 
 
-def create_example_test(row, vocab, lda):
+def create_example_test(row, vocab, lda, vect):
   """
   Creates a test/validation example for the Ubuntu Dialog Corpus dataset.
   Returnsthe a tensorflow.Example Protocol Buffer object.
@@ -125,8 +125,8 @@ def create_example_test(row, vocab, lda):
   utterance_token_len_avg = np.mean([len(t) for t in next(vocab._tokenizer([utterance]))])
   context_nums = len(re.findall(r'[0-9]',context))
   utterance_nums = len(re.findall(r'[0-9]',utterance))
-  context_topics = eval_lda_model(lda,context)
-  utterance_topics = eval_lda_model(lda,utterance)
+  context_topics = eval_lda_model(lda,vect,context)
+  utterance_topics = eval_lda_model(lda,vect,utterance)
   
   # New Example
   example = tf.train.Example()
@@ -153,9 +153,8 @@ def create_example_test(row, vocab, lda):
     example.features.feature[dis_key].int64_list.value.extend(dis_transformed)
   return example
 
-def eval_lda_model(ldamodel,new_doc):
-    vect = CountVectorizer(min_df=20, max_df=0.2, stop_words='english', 
-                       token_pattern='(?u)\\b\\w\\w\\w+\\b')    
+def eval_lda_model(ldamodel,vect,new_doc):
+  
     bow = vect.transform([new_doc])
     s2c = gensim.matutils.Sparse2Corpus(bow, documents_columns=False)
     new_topics = [nt for nt in ldamodel[s2c]]
@@ -169,7 +168,7 @@ def create_lda_model():
     corpus = gensim.matutils.Sparse2Corpus(X, documents_columns=False)
     id_map = dict((v, k) for k, v in vect.vocabulary_.items())
     ldamodel = gensim.models.ldamodel.LdaModel(corpus, id2word = id_map, num_topics = 10, passes = 5, random_state = 34)
-    return ldamodel
+    return ldamodel,vect
 
 def create_tfrecords_file(input_filename, output_filename, example_fn):
   """
@@ -204,7 +203,7 @@ if __name__ == "__main__":
   vocab = create_vocab(input_iter, min_frequency=FLAGS.min_word_frequency)
   print("Total vocabulary size: {}".format(len(vocab.vocabulary_)))
   print("Building LDA model")
-  ldamodel = create_lda_model()
+  ldamodel,vect = create_lda_model()
 
   # Create vocabulary.txt file
   write_vocabulary(
