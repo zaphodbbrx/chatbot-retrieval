@@ -1,7 +1,7 @@
 import tensorflow as tf
 import sys
 
-def get_id_feature(features, key, len_key, max_len):
+def get_id_feature(features, key, len_key, key_token_len_avg, key_nums, max_len):
   ids = features[key]
   ids_len = tf.squeeze(features[len_key], [1])
   ids_len = tf.minimum(ids_len, tf.constant(max_len, dtype=tf.int64))
