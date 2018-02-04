@@ -83,7 +83,7 @@ def create_model_fn(hparams, model_impl):
       
 
       for i in range(9):       
-        distractor, distractor_len, distractor_token_len_avg, distractor_nums = get_id_feature(features,
+        distractor, distractor_len = get_id_feature(features,
             "utterance_{}".format(i),
             "utterance_{}_len".format(i),
             hparams.max_utterance_len)
