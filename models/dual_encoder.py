@@ -24,7 +24,7 @@ def dual_encoder_model(
     hparams,
     mode,
     context,
-    context_nums,
+    context_len,
     utterance,
     utterance_len,
     targets):
