@@ -45,7 +45,7 @@ def create_model_fn(hparams, model_impl):
       all_utterance_lens = [utterance_len]
 
       for i in range(1,features["len"]):
-        distractor, distractor_len, distractor_token_len_avg, distractor_nums = get_id_feature(features,
+        distractor, distractor_len = get_id_feature(features,
             "utterance_{}".format(i),
             "utterance_{}_len".format(i),
             hparams.max_utterance_len)
