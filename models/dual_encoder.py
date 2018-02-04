@@ -24,13 +24,9 @@ def dual_encoder_model(
     hparams,
     mode,
     context,
-    context_len,
-    context_token_len_avg,
     context_nums,
     utterance,
     utterance_len,
-    utterance_token_len_avg,
-    utterance_nums,
     targets):
 
   # Initialize embedidngs randomly or with pre-trained vectors if available
