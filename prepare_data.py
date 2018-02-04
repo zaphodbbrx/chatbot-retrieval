@@ -175,8 +175,7 @@ if __name__ == "__main__":
   input_iter = (x[0] + " " + x[1] for x in input_iter)
   vocab = create_vocab(input_iter, min_frequency=FLAGS.min_word_frequency)
   print("Total vocabulary size: {}".format(len(vocab.vocabulary_)))
-  print("Building LDA model")
-
+  
   # Create vocabulary.txt file
   write_vocabulary(
     vocab, os.path.join(FLAGS.output_dir, "vocabulary.txt"))
