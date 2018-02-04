@@ -21,7 +21,7 @@ def get_feature_columns(mode):
   feature_columns.append(tf.contrib.layers.real_valued_column(
       column_name="utterance_token_len_avg", dimension=1, dtype=tf.int64))
   feature_columns.append(tf.contrib.layers.real_valued_column(
-      column_name="utterance_nums", dimension=1, dtype=tf.int64))  
+      column_name="utterance_nums", dimension=1, dtype=tf.int64))
   if mode == tf.contrib.learn.ModeKeys.TRAIN:
     # During training we have a label feature
     feature_columns.append(tf.contrib.layers.real_valued_column(

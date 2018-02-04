@@ -128,8 +128,8 @@ def create_example_test(row, vocab):
   example.features.feature["utterance"].int64_list.value.extend(utterance_transformed)
   example.features.feature["context_len"].int64_list.value.extend([context_len])
   example.features.feature["utterance_len"].int64_list.value.extend([utterance_len])
-  example.features.feature["context_token_len_avg"].float_list.value.extend([context_token_len_avg])
-  example.features.feature["utterance_token_len_avg"].float_list.value.extend([utterance_token_len_avg])
+  example.features.feature["context_token_len_avg"].int64_list.value.extend([context_token_len_avg])
+  example.features.feature["utterance_token_len_avg"].int64_list.value.extend([utterance_token_len_avg])
   example.features.feature["context_nums"].int64_list.value.extend([context_nums])
   example.features.feature["utterance_nums"].int64_list.value.extend([utterance_nums])
 
