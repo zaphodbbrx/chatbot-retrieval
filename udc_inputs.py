@@ -13,7 +13,8 @@ def get_feature_columns(mode):
       column_name="context_token_len_avg", dimension=1, dtype=tf.int64))
   feature_columns.append(tf.contrib.layers.real_valued_column(
       column_name="context_nums", dimension=1, dtype=tf.int64))  
-
+  
+  
   feature_columns.append(tf.contrib.layers.real_valued_column(
       column_name="utterance", dimension=TEXT_FEATURE_SIZE, dtype=tf.int64))
   feature_columns.append(tf.contrib.layers.real_valued_column(
