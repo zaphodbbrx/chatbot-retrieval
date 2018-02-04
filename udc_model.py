@@ -21,10 +21,11 @@ def create_model_fn(hparams, model_impl):
 
   def model_fn(features, targets, mode):
     context, context_len = get_id_feature(
-        features, "context", "context_len", hparams.max_context_len)   
+        features, "context", "context_len", hparams.max_context_len)
+
     utterance, utterance_len = get_id_feature(
         features, "utterance", "utterance_len", hparams.max_utterance_len)
-    
+
     if mode == tf.contrib.learn.ModeKeys.TRAIN:
       probs, loss = model_impl(
           hparams,
@@ -72,26 +73,21 @@ def create_model_fn(hparams, model_impl):
       batch_size = targets.get_shape().as_list()[0]
 
       # We have 10 exampels per record, so we accumulate them
-      
       all_contexts = [context]
       all_context_lens = [context_len]
       all_utterances = [utterance]
       all_utterance_lens = [utterance_len]
-      
       all_targets = [tf.ones([batch_size, 1], dtype=tf.int64)]
-      
-      
 
-      for i in range(9):       
+      for i in range(9):
         distractor, distractor_len = get_id_feature(features,
-            "utterance_{}".format(i),
-            "utterance_{}_len".format(i),
+            "distractor_{}".format(i),
+            "distractor_{}_len".format(i),
             hparams.max_utterance_len)
         all_contexts.append(context)
         all_context_lens.append(context_len)
         all_utterances.append(distractor)
         all_utterance_lens.append(distractor_len)
-        
         all_targets.append(
           tf.zeros([batch_size, 1], dtype=tf.int64)
         )
@@ -102,7 +98,8 @@ def create_model_fn(hparams, model_impl):
           tf.concat(0, all_contexts),
           tf.concat(0, all_context_lens),
           tf.concat(0, all_utterances),
-          tf.concat(0, all_utterance_lens))
+          tf.concat(0, all_utterance_lens),
+          tf.concat(0, all_targets))
 
       split_probs = tf.split(0, 10, probs)
       shaped_probs = tf.concat(1, split_probs)
