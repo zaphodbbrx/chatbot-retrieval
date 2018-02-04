@@ -55,12 +55,9 @@ def dual_encoder_model(
     # Run the utterance and context through the RNN
     rnn_outputs, rnn_states = tf.nn.dynamic_rnn(
         cell,
-        tf.concat(0, [context_embedded,
-                      tf.cast(context_token_len_avg,dtype = tf.float32),
-                      tf.cast(context_nums,dtype = tf.float32),
-                      utterance_embedded,
-                      tf.cast(utterance_token_len_avg,dtype = tf.float32),
-                      tf.cast(utterance_nums, dtype = tf.float32)]),
+        tf.concat(0, [tf.concat(0,[context_embedded,context_token_len_avg, context_nums]),
+                      tf.concat(0,[utterance_embedded,utterance_token_len_avg,utterance_nums])]
+                      ),
         sequence_length=tf.concat(0, [context_len+2, utterance_len+2]),
         dtype=tf.float32)
     encoding_context, encoding_utterance = tf.split(0, 2, rnn_states.h)
