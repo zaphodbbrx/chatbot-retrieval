@@ -83,8 +83,10 @@ def create_example_train(row, vocab):
   utterance_transformed = transform_sentence(utterance, vocab)
   context_len = len(next(vocab._tokenizer([context])))
   utterance_len = len(next(vocab._tokenizer([utterance])))
-  context_token_len_avg = np.mean([len(t) for t in next(vocab._tokenizer([context]))])
-  utterance_token_len_avg = np.mean([len(t) for t in next(vocab._tokenizer([utterance]))])
+  context_token_len_avg = int(np.round(
+          np.mean([len(t) for t in next(vocab._tokenizer([context]))])))
+  utterance_token_len_avg = int(np.round(
+          np.mean([len(t) for t in next(vocab._tokenizer([utterance]))])))
   context_nums = len(re.findall(r'[0-9]',context))
   utterance_nums = len(re.findall(r'[0-9]',utterance))
 
@@ -116,8 +118,10 @@ def create_example_test(row, vocab):
   utterance_len = len(next(vocab._tokenizer([utterance])))
   context_transformed = transform_sentence(context, vocab)
   utterance_transformed = transform_sentence(utterance, vocab)
-  context_token_len_avg = np.round(np.mean([len(t) for t in next(vocab._tokenizer([context]))]))
-  utterance_token_len_avg = np.round(np.mean([len(t) for t in next(vocab._tokenizer([utterance]))]))
+  context_token_len_avg = int(np.round(
+          np.mean([len(t) for t in next(vocab._tokenizer([context]))])))
+  utterance_token_len_avg = int(np.round(
+          np.mean([len(t) for t in next(vocab._tokenizer([utterance]))])))
   context_nums = len(re.findall(r'[0-9]',context))
   utterance_nums = len(re.findall(r'[0-9]',utterance))
 
