@@ -94,8 +94,8 @@ def create_example_train(row, vocab):
 
   # New Example
   example = tf.train.Example()
-  example.features.feature["context"].int64_list.value.extend(context_transformed+[context_token_len_avg])#.append(context_token_len_avg))
-  example.features.feature["utterance"].int64_list.value.extend(utterance_transformed+[utterance_token_len_avg])#.append(utterance_token_len_avg))
+  example.features.feature["context"].int64_list.value.extend(context_transformed+[context_token_len_avg])
+  example.features.feature["utterance"].int64_list.value.extend(utterance_transformed+[utterance_token_len_avg])
   example.features.feature["context_len"].int64_list.value.extend([context_len])
   example.features.feature["utterance_len"].int64_list.value.extend([utterance_len])
 
