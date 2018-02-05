@@ -91,8 +91,8 @@ def create_example_train(row, vocab):
   utterance_nums = len(re.findall(r'[0-9]',utterance))
 
   label = int(float(label))
-  context[-1] = context_token_len_avg
-  utterance[-1] = utterance_token_len_avg
+  context_transformed[-1] = context_token_len_avg
+  utterance_transformed[-1] = utterance_token_len_avg
   # New Example
   example = tf.train.Example()
   example.features.feature["context"].int64_list.value.extend(context_transformed)
