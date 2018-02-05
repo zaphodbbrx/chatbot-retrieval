@@ -12,7 +12,7 @@ import re
 tf.flags.DEFINE_integer(
   "min_word_frequency", 5, "Minimum frequency of words in the vocabulary")
 
-tf.flags.DEFINE_integer("max_sentence_len", 160, "Maximum Sentence Length")
+tf.flags.DEFINE_integer("max_sentence_len", 170, "Maximum Sentence Length")
 
 tf.flags.DEFINE_string(
   "input_dir", os.path.abspath("./data"),
