@@ -12,7 +12,7 @@ import re
 tf.flags.DEFINE_integer(
   "min_word_frequency", 5, "Minimum frequency of words in the vocabulary")
 
-tf.flags.DEFINE_integer("max_sentence_len", 170, "Maximum Sentence Length")
+tf.flags.DEFINE_integer("max_sentence_len", 160, "Maximum Sentence Length")
 
 tf.flags.DEFINE_string(
   "input_dir", os.path.abspath("./data"),
@@ -81,8 +81,8 @@ def create_example_train(row, vocab):
   context, utterance, label = row
   context_transformed = transform_sentence(context, vocab)
   utterance_transformed = transform_sentence(utterance, vocab)
-  context_len = len(next(vocab._tokenizer([context])))+1
-  utterance_len = len(next(vocab._tokenizer([utterance])))+1
+  context_len = len(next(vocab._tokenizer([context])))
+  utterance_len = len(next(vocab._tokenizer([utterance])))
   context_token_len_avg = int(np.round(
           np.mean([len(t) for t in next(vocab._tokenizer([context]))])))
   utterance_token_len_avg = int(np.round(
@@ -110,8 +110,8 @@ def create_example_test(row, vocab):
   """
   context, utterance = row[:2]
   distractors = row[2:]
-  context_len = len(next(vocab._tokenizer([context])))+1
-  utterance_len = len(next(vocab._tokenizer([utterance])))+1
+  context_len = len(next(vocab._tokenizer([context])))
+  utterance_len = len(next(vocab._tokenizer([utterance])))
   context_transformed = transform_sentence(context, vocab)
   utterance_transformed = transform_sentence(utterance, vocab)
   context_token_len_avg = int(np.round(
